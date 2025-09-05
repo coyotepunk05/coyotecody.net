@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+*{
+  margin:0px;
+  paddding:0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+html, body{
+  min-height: 100vh;
+  background-image: url("./images/My_Neighbor_Totoro.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.centered-container{
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  backdrop-filter: blur(20px);
+}
+tr, td, th{
+  border: 1px solid #FFFFFF;
+  text-align: left;
+  padding: 8px;
+}
+.header{
+  text-align: center;
+}

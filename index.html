@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+function set_status(el, status, url) {
+    const hostname = new URL(url).hostname; // get only "music.coyotecody.net"
+    el.textContent = status ? `🟢 ${hostname} is up` : `🔴 ${hostname} is down`;
+    el.style.color = status ? "#16a34a" : "#dc2626"; // green/red
+    el.style.fontWeight = "bold";
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('p.site_status').forEach(el => {
+        const imgUrl = el.getAttribute('data-url');
+        const img = document.createElement("img");
+        img.src = imgUrl + "?rand=" + Math.random();
+        img.onload = () => set_status(el, true, imgUrl);
+        img.onerror = () => set_status(el, false, imgUrl);
+        img.style.display = "none";
+        document.body.appendChild(img);
+    });
+});
+</script>
+  <head>
+    <title>coyotecody landing page :)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./style.css">
+  </head>
+  <body id="body" class="chart">
+    <table class="centered-container">
+      <tr>
+        <th colspan="2" class="toprow">
+          <div class="p1" id="topbar">
+            <p style="" class="header">COYOTECODY</p>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <td class="row2col1">
+          <div class="" id="">
+            <p style="" class="middle">hi</p>
+          </div>
+        </td>
+        <td class="row2col2">
+          <div class="" id="">
+            <p style="" class="middle-right">my services :)</p>
+            <p class="site_status" data-url="https://music.coyotecody.net/web/assets/img/banner-light.png">Checking...</p>
+            <p class="site_status" data-url="https://nextcloud.coyotecody.net/core/img/logo/logo.svg">Checking...</p>
+            <p class="site_status" data-url="https://immich.coyotecody.net/api/assets/23c85887-179c-4c48-8902-038cf72ac9f0/thumbnail?slug=buster&size=preview&c=GwgODQKgapOop5x4eIiYiIigXArK">Checking...</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
