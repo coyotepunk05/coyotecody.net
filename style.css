@@ -42,3 +42,10 @@ a.button-class {
 		cursor: pointer;
 		border-radius: 4px;
 }
+.button-class:link, 
+.button-class:visited, 
+.button-class:hover, 
+.button-class:active {
+    color: white; 
+    text-decoration: none;
+}
