@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 *{
   margin:0px;
-  paddding:0px;
+  padding:0px;
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
   color: #FFFFFF;
@@ -28,7 +28,7 @@ tr, td, th{
 .header{
   text-align: center;
 }
-.button-class {
+a.button-class {
 		background-color: #000000;
 		/* Green */
 		border: none;
