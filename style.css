@@ -49,3 +49,7 @@ tr, td, th{
     color: #000000;
     border-color: #000000;
 }
+p.site_status a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}

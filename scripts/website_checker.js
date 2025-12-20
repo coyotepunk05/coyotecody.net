@@ -1,7 +1,24 @@
 function set_status(el, status, url) {
-    const hostname = new URL(url).hostname;
-    el.textContent = status ? `🟢 ${hostname} is up` : `🔴 ${hostname} is down`;
-    el.style.color = status ? "#16a34a" : "#dc2626";
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname;
+    const baseUrl = `${urlObj.protocol}//${hostname}`; // Extracts the homepage URL
+
+    // Clear the "Checking..." text
+    el.textContent = status ? "🟢 " : "🔴 ";
+
+    // Create the hyperlink
+    const link = document.createElement("a");
+    link.href = baseUrl;
+    link.textContent = hostname;
+    link.target = "_blank"; // Opens in a new tab
+    link.style.color = status ? "#16a34a" : "#dc2626";
+    link.style.textDecoration = "none"; // Optional: removes underline
+
+    // Add " is up/down" after the link
+    const statusText = document.createTextNode(status ? " is up" : " is down");
+
+    el.appendChild(link);
+    el.appendChild(statusText);
     el.style.fontWeight = "bold";
 }
 
