@@ -1,24 +1,22 @@
 <?php
-// 1. THE REAL CHECK: Try to open a connection to the domain/port
-// We check media.coyotecody.net on port 443 (HTTPS)
-$host = 'media.coyotecody.net';
-$port = 443;
-$timeout = 2; // Seconds
+// 1. THE AGGRESSIVE CHECK
+// We try to physically connect to the port. If Jellyfin is down, this fails.
+$host = 'media.coyotecody.net'; 
+$port = 443; 
+$timeout = 2;
 
 $fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
 
-if ($fp) {
-    $is_up = true;
-    fclose($fp);
-} else {
-    $is_up = false;
-}
+// Only if the connection is physically established do we say it's up
+$is_up = ($fp !== false);
+if ($fp) fclose($fp);
 
-// 2. SET VARIABLES (Keep your existing absolute URLs for Discord)
+// 2. EMBED SETTINGS
 $status_title = $is_up ? "Jellyfin is UP" : "Jellyfin is DOWN";
 $status_desc  = $is_up ? "jelly flourish" : "jellykill";
-$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c";
+$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c"; // Purple (Up) vs Red (Down)
 
+// Absolute URLs for Discord
 $embed_gif = $is_up 
     ? "https://coyotecody.net/images/flourish.gif" 
     : "https://coyotecody.net/images/jellykill.gif";
@@ -31,47 +29,34 @@ $embed_gif = $is_up
     <title><?php echo $status_title; ?></title>
     
     <meta property="og:title" content="<?php echo $status_title; ?>">
-    <meta property="og:description" content="Live status check">
+    <meta property="og:description" content="<?php echo $status_desc; ?>">
     <meta property="og:image" content="<?php echo $embed_gif; ?>">
-    <meta property="og:type" content="website">
     <meta name="theme-color" content="<?php echo $theme_color; ?>">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="<?php echo $embed_gif; ?>">
 
     <link rel="stylesheet" type="text/css" href="./style.css?nocache123">
 </head>
 <body>
     <div style="padding: 20px;">
         <div id="status_container">
-            <img id="status_gif" src="./images/flourish.gif" style="display: none; max-width: 300px;">
-            <p id="status_text" style="color: white; font-weight: bold; font-family: sans-serif;">Checking...</p>
+            <img id="status_gif" src="./images/<?php echo $is_up ? 'flourish.gif' : 'jellykill.gif'; ?>" style="display: block; max-width: 300px; margin-bottom: 10px;">
+            <p id="status_text" style="color: white; font-weight: bold; font-family: sans-serif;">
+                <?php echo $status_desc; ?>
+            </p>
         </div>
-
         <button class="button" onclick="location.href='./index.html'">mmmmrowww (back)</button>
     </div>
 
     <script>
-        const imgUrl = "<?php echo $check_url; ?>";
+        // JS remains as a fallback to catch any mid-session changes
+        const imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png";
         const testImg = new Image();
-        const statusGif = document.getElementById('status_gif');
-        const statusText = document.getElementById('status_text');
-
-        testImg.onload = () => {
-            statusGif.src = "./images/flourish.gif?t=" + Date.now();
-            statusGif.style.display = "block";
-            statusText.textContent = "jelly flourish";
-            statusText.style.color = "#16a34a";
-        };
-
+        
         testImg.onerror = () => {
-            statusGif.src = "./images/jellykill.gif?t=" + Date.now();
-            statusGif.style.display = "block";
-            statusText.textContent = "jellykill";
-            statusText.style.color = "#dc2626";
+            document.getElementById('status_gif').src = "./images/jellykill.gif";
+            document.getElementById('status_text').textContent = "jellykill";
+            document.getElementById('status_text').style.color = "#dc2626";
         };
-
-        testImg.src = imgUrl + "?rand=" + Math.random();
+        testImg.src = imgUrl + "?rand=" + Date.now();
     </script>
 </body>
 </html>
