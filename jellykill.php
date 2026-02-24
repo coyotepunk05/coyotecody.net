@@ -1,5 +1,5 @@
 <?php
-$imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png";
+$imgUrl = "https://media.coyotecody.net/health";
 
 $ch = curl_init($imgUrl);
 curl_setopt_array($ch, [
