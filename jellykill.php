@@ -1,61 +1,62 @@
 <?php
 /**
- * Using your method: If the specific image asset can't be reached, the site is DOWN.
+ * PHP Best Guess for the Discord Embed
+ * (Bots don't run JS, so we give them a static starting point)
  */
 $asset_url = 'https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png';
-
-// PHP's version of your "img.onerror" - we check for a 200 OK response
-$context = stream_context_create(['http' => ['timeout' => 2, 'ignore_errors' => true]]);
-$headers = @get_headers($asset_url, 0, $context);
-
-// Only a real "200 OK" from the actual server counts as UP
-$is_up = ($headers && strpos($headers[0], '200') !== false);
-
-// Data for the Discord Embed (Social Meta Tags)
-$status_title = $is_up ? "Jellyfin is UP" : "Jellyfin is DOWN";
-$status_desc  = $is_up ? "jelly flourish" : "jellykill";
-$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c"; // Purple vs Red
-$embed_gif    = $is_up ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
+$status_title = "Jellyfin Status Check"; 
+$embed_gif = "https://coyotecody.net/images/flourish.gif";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $status_title; ?></title>
+    <title>Jellyfin Status</title>
     
     <meta property="og:title" content="<?php echo $status_title; ?>">
-    <meta property="og:description" content="<?php echo $status_desc; ?>">
+    <meta property="og:description" content="Live status check for coyotecody.net">
     <meta property="og:image" content="<?php echo $embed_gif; ?>">
-    <meta name="theme-color" content="<?php echo $theme_color; ?>">
+    <meta name="theme-color" content="#aa5ccc">
 
     <link rel="stylesheet" type="text/css" href="./style.css?nocache123">
 </head>
 <body>
     <div style="padding: 20px;">
         <div id="status_container">
-            <img id="status_gif" src="./images/<?php echo $is_up ? 'flourish.gif' : 'jellykill.gif'; ?>" alt="" style="display: block; max-width: 300px; margin-bottom: 10px;">
-            <p id="status_text" style="color: white; font-weight: bold; font-family: sans-serif;">
-                <?php echo $status_desc; ?>
-            </p>
+            <img id="status_gif" src="" style="display: none; max-width: 300px; margin-bottom: 10px;">
+            <p id="status_text" style="color: white; font-weight: bold; font-family: sans-serif;">Checking...</p>
         </div>
         <button class="button" onclick="location.href='./index.html'">mmmmrowww (back)</button>
     </div>
 
     <script>
-        /** * Your Original Logic:
-         * We run this to double-check in the browser. 
-         * If the browser fails to load the image, it overrides the page immediately.
+        /**
+         * YOUR METHOD: The "Source of Truth"
          */
+        const imgUrl = "<?php echo $asset_url; ?>";
         const testImg = new Image();
+        const gifEl = document.getElementById('status_gif');
+        const textEl = document.getElementById('status_text');
+
+        // If your method says it's UP
+        testImg.onload = () => {
+            gifEl.src = "./images/flourish.gif";
+            gifEl.style.display = "block";
+            textEl.textContent = "jelly flourish";
+            textEl.style.color = "#16a34a";
+        };
+
+        // If your method says it's DOWN
         testImg.onerror = () => {
-            document.getElementById('status_gif').src = "./images/jellykill.gif";
-            const textEl = document.getElementById('status_text');
+            gifEl.src = "./images/jellykill.gif";
+            gifEl.style.display = "block";
             textEl.textContent = "jellykill";
             textEl.style.color = "#dc2626";
         };
-        // Use your cache-busting trick
-        testImg.src = "<?php echo $asset_url; ?>?rand=" + Date.now();
+
+        // Kick off the check with your cache-busting trick
+        testImg.src = imgUrl + "?rand=" + Date.now();
     </script>
 </body>
 </html>
