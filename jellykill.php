@@ -1,22 +1,19 @@
 <?php
-// 1. THE AGGRESSIVE CHECK
-// We try to physically connect to the port. If Jellyfin is down, this fails.
-$host = 'media.coyotecody.net'; 
-$port = 443; 
+// 1. THE CHECK (PHP Source of Truth)
+$host = 'media.coyotecody.net';
+$port = 443;
 $timeout = 2;
 
 $fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
-
-// Only if the connection is physically established do we say it's up
 $is_up = ($fp !== false);
 if ($fp) fclose($fp);
 
 // 2. EMBED SETTINGS
+// We use absolute URLs to ensure Discord can find the files
 $status_title = $is_up ? "Jellyfin is UP" : "Jellyfin is DOWN";
 $status_desc  = $is_up ? "jelly flourish" : "jellykill";
-$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c"; // Purple (Up) vs Red (Down)
+$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c"; // Purple vs Red
 
-// Absolute URLs for Discord
 $embed_gif = $is_up 
     ? "https://coyotecody.net/images/flourish.gif" 
     : "https://coyotecody.net/images/jellykill.gif";
@@ -32,6 +29,7 @@ $embed_gif = $is_up
     <meta property="og:description" content="<?php echo $status_desc; ?>">
     <meta property="og:image" content="<?php echo $embed_gif; ?>">
     <meta name="theme-color" content="<?php echo $theme_color; ?>">
+    <meta property="og:type" content="website">
 
     <link rel="stylesheet" type="text/css" href="./style.css?nocache123">
 </head>
@@ -47,7 +45,7 @@ $embed_gif = $is_up
     </div>
 
     <script>
-        // JS remains as a fallback to catch any mid-session changes
+        // JS remains as a live backup if the user stays on the page
         const imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png";
         const testImg = new Image();
         
