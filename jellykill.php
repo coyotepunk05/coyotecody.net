@@ -1,18 +1,27 @@
 <?php
-// 1. DISCORD EMBED LOGIC (PHP)
-$check_url = 'https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png';
-$context = stream_context_create(['http' => ['timeout' => 2]]);
-$headers = @get_headers($check_url, 0, $context);
-$is_up_guess = ($headers && strpos($headers[0], '200') !== false);
+// 1. THE REAL CHECK: Try to open a connection to the domain/port
+// We check media.coyotecody.net on port 443 (HTTPS)
+$host = 'media.coyotecody.net';
+$port = 443;
+$timeout = 2; // Seconds
 
-$status_title = $is_up_guess ? "Jellyfin is UP" : "Jellyfin is DOWN";
+$fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
 
-// IMPORTANT: Discord needs the FULL absolute URL to show the image
-$embed_gif = $is_up_guess 
+if ($fp) {
+    $is_up = true;
+    fclose($fp);
+} else {
+    $is_up = false;
+}
+
+// 2. SET VARIABLES (Keep your existing absolute URLs for Discord)
+$status_title = $is_up ? "Jellyfin is UP" : "Jellyfin is DOWN";
+$status_desc  = $is_up ? "jelly flourish" : "jellykill";
+$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c";
+
+$embed_gif = $is_up 
     ? "https://coyotecody.net/images/flourish.gif" 
     : "https://coyotecody.net/images/jellykill.gif";
-
-$theme_color = $is_up_guess ? '#aa5ccc' : '#ff4c4c';
 ?>
 
 <!DOCTYPE html>
