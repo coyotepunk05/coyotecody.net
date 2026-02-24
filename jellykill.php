@@ -29,16 +29,19 @@ $theme_color  = $is_up ? "#52AD5B" : "#FF4C4C";
     <link rel="stylesheet" type="text/css" href="./style.css?nocache123">
 </head>
 <body>
-    <div style="text-align: left; padding: 20px;">
+    <div style="padding: 20px;">
         <div id="status">
-            <img src="<?php echo $status_gif; ?>" alt="<?php echo $status_desc; ?>" style="display: block; margin-bottom: 10px; max-width: 300px;">
-            
-            <span style="font-family: sans-serif; color: white; font-size: 1.2em;">
-                <?php echo $status_desc; ?>
-            </span>
+            <?php if ($is_up): ?>
+                <img src="https://media.discordapp.net/attachments/883081538596642826/1375096957374038186/attachment.gif" 
+                     style="display: block; max-width: 300px; margin-bottom: 10px;">
+                <p style="color: white; font-weight: bold;">jelly flourish</p>
+            <?php else: ?>
+                <img src="https://media.discordapp.net/attachments/883081538596642826/1374210725496488017/attachment.gif" 
+                     style="display: block; max-width: 300px; margin-bottom: 10px;">
+                <p style="color: #FF4C4C; font-weight: bold;">jellykill</p>
+            <?php endif; ?>
         </div>
 
-        <br>
         <button class="button" onclick="location.href='./index.html'">mmmmrowww (back)</button>
     </div>
 </body>
