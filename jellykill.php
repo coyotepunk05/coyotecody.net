@@ -7,19 +7,16 @@ curl_setopt_array($ch, [
     CURLOPT_TIMEOUT        => 5,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_SSL_VERIFYPEER => false,
-    CURLOPT_RANGE          => "0-7", // only grab the first 8 bytes
+    CURLOPT_RANGE          => "0-7",
 ]);
 $data = curl_exec($ch);
+$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
-// Real PNG files always start with these exact bytes
-$isUp = (substr($data, 0, 4) === "\x89PNG");
-
-$status_title      = "Jellyfin Status Check";
-$embed_description = $isUp ? "✅ Jellyfin is up!" : "❌ Jellyfin is down!";
-$embed_gif         = $isUp ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
-$embed_color       = $isUp ? "#16a34a" : "#dc2626";
-$status_text       = $isUp ? "jelly flourish" : "jellykill";
+echo "HTTP code: " . $code . "<br>";
+echo "First bytes (hex): " . bin2hex($data) . "<br>";
+echo "First bytes (raw): " . htmlspecialchars($data) . "<br>";
+die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
