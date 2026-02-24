@@ -1,9 +1,5 @@
 <?php
-/**
- * PHP Best Guess for the Discord Embed
- * (Bots don't run JS, so we give them a static starting point)
- */
-$asset_url = 'https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png';
+// We keep the PHP purely for the "Static" part of the Discord embed
 $status_title = "Jellyfin Status Check"; 
 $embed_gif = "https://coyotecody.net/images/flourish.gif";
 ?>
@@ -31,31 +27,26 @@ $embed_gif = "https://coyotecody.net/images/flourish.gif";
     </div>
 
     <script>
-        /**
-         * YOUR METHOD: The "Source of Truth"
-         */
-        const imgUrl = "<?php echo $asset_url; ?>";
+        // YOUR METHOD: The only one we trust
+        const imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png";
         const testImg = new Image();
         const gifEl = document.getElementById('status_gif');
         const textEl = document.getElementById('status_text');
 
-        // If your method says it's UP
         testImg.onload = () => {
             gifEl.src = "./images/flourish.gif";
             gifEl.style.display = "block";
             textEl.textContent = "jelly flourish";
-            textEl.style.color = "#16a34a";
+            textEl.style.color = "#16a34a"; // Green
         };
 
-        // If your method says it's DOWN
         testImg.onerror = () => {
             gifEl.src = "./images/jellykill.gif";
             gifEl.style.display = "block";
             textEl.textContent = "jellykill";
-            textEl.style.color = "#dc2626";
+            textEl.style.color = "#dc2626"; // Red
         };
 
-        // Kick off the check with your cache-busting trick
         testImg.src = imgUrl + "?rand=" + Date.now();
     </script>
 </body>
