@@ -3,23 +3,24 @@ $imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.pn
 
 $ch = curl_init($imgUrl);
 curl_setopt_array($ch, [
-    CURLOPT_NOBODY        => true,   // HEAD request, don't download the image
+    CURLOPT_NOBODY         => true,
     CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT       => 5,
-    CURLOPT_FOLLOWLOCATION => false, // Don't follow redirects - a redirect means it's NOT truly up
+    CURLOPT_TIMEOUT        => 5,
+    CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_SSL_VERIFYPEER => false,
 ]);
 curl_exec($ch);
-$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$code        = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 curl_close($ch);
 
-$isUp = ($code === 200);
+$isUp = ($code === 200 && strpos($contentType, 'image/') !== false);
 
-$status_title   = "Jellyfin Status Check";
+$status_title      = "Jellyfin Status Check";
 $embed_description = $isUp ? "✅ Jellyfin is up!" : "❌ Jellyfin is down!";
-$embed_gif      = $isUp ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
-$embed_color    = $isUp ? "#16a34a" : "#dc2626";
-$status_text    = $isUp ? "jelly flourish" : "jellykill";
+$embed_gif         = $isUp ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
+$embed_color       = $isUp ? "#16a34a" : "#dc2626";
+$status_text       = $isUp ? "jelly flourish" : "jellykill";
 ?>
 <!DOCTYPE html>
 <html lang="en">
