@@ -1,5 +1,5 @@
 <?php
-$checkUrl = "https://media.coyotecody.net/health";
+$checkUrl = "https://jellyfin.olgi.net/health";
 
 $ch = curl_init($checkUrl);
 curl_setopt_array($ch, [
@@ -16,10 +16,10 @@ curl_close($ch);
 $isUp = ($code === 200);
 
 $status_title      = "Jellyfin Status Check";
-$embed_description = $isUp ? "✅ Jellyfin is up!" : "❌ Jellyfin is down!";
+$embed_description = $isUp ? "✅ jellyflourish!" : "❌ jellykill";
 $embed_gif         = $isUp ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
 $embed_color       = $isUp ? "#16a34a" : "#dc2626";
-$status_text       = $isUp ? "jelly flourish" : "jellykill";
+/* $status_text       = $isUp ? "jelly flourish" : "jellykill"; */
 ?>
 <!DOCTYPE html>
 <html lang="en">
