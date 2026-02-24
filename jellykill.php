@@ -3,18 +3,17 @@ $imgUrl = "https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.pn
 
 $ch = curl_init($imgUrl);
 curl_setopt_array($ch, [
-    CURLOPT_NOBODY         => true,
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_TIMEOUT        => 5,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_RANGE          => "0-7", // only grab the first 8 bytes
 ]);
-curl_exec($ch);
-$code        = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+$data = curl_exec($ch);
 curl_close($ch);
 
-$isUp = ($code === 200 && strpos($contentType, 'image/') !== false);
+// Real PNG files always start with these exact bytes
+$isUp = (substr($data, 0, 4) === "\x89PNG");
 
 $status_title      = "Jellyfin Status Check";
 $embed_description = $isUp ? "✅ Jellyfin is up!" : "❌ Jellyfin is down!";
