@@ -29,12 +29,17 @@ $theme_color  = $is_up ? "#52AD5B" : "#FF4C4C";
     <link rel="stylesheet" type="text/css" href="./style.css?nocache123">
 </head>
 <body>
-    <p id="status">
-        <img src="<?php echo $status_gif; ?>" alt="<?php echo $status_desc; ?>">
-        <br>
-        <?php echo $status_desc; ?>
-    </p>
+    <div style="text-align: left; padding: 20px;">
+        <div id="status">
+            <img src="<?php echo $status_gif; ?>" alt="<?php echo $status_desc; ?>" style="display: block; margin-bottom: 10px; max-width: 300px;">
+            
+            <span style="font-family: sans-serif; color: white; font-size: 1.2em;">
+                <?php echo $status_desc; ?>
+            </span>
+        </div>
 
-    <button class="button" onclick="location.href='./index.html'">mmmmrowww (back)</button>
+        <br>
+        <button class="button" onclick="location.href='./index.html'">mmmmrowww (back)</button>
+    </div>
 </body>
 </html>
