@@ -1,18 +1,20 @@
 <?php
 /**
- * Using your exact logic: If the image can't be fetched, the site is down.
+ * Using your method: If the specific image asset can't be reached, the site is DOWN.
  */
-$imgUrl = 'https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png';
+$asset_url = 'https://media.coyotecody.net/web/banner-light.b113d4d1c6c07fcb73f0.png';
 
-// PHP's version of your "img.onload" - checking for a successful 200 OK
+// PHP's version of your "img.onerror" - we check for a 200 OK response
 $context = stream_context_create(['http' => ['timeout' => 2, 'ignore_errors' => true]]);
-$headers = @get_headers($imgUrl, 0, $context);
+$headers = @get_headers($asset_url, 0, $context);
+
+// Only a real "200 OK" from the actual server counts as UP
 $is_up = ($headers && strpos($headers[0], '200') !== false);
 
-// Discord Embed Data
+// Data for the Discord Embed (Social Meta Tags)
 $status_title = $is_up ? "Jellyfin is UP" : "Jellyfin is DOWN";
 $status_desc  = $is_up ? "jelly flourish" : "jellykill";
-$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c";
+$theme_color  = $is_up ? "#aa5ccc" : "#ff4c4c"; // Purple vs Red
 $embed_gif    = $is_up ? "https://coyotecody.net/images/flourish.gif" : "https://coyotecody.net/images/jellykill.gif";
 ?>
 
@@ -41,21 +43,19 @@ $embed_gif    = $is_up ? "https://coyotecody.net/images/flourish.gif" : "https:/
     </div>
 
     <script>
-        /** * Your Original Logic: 
-         * Re-verifies in the browser to ensure the user sees the real-time truth.
+        /** * Your Original Logic:
+         * We run this to double-check in the browser. 
+         * If the browser fails to load the image, it overrides the page immediately.
          */
         const testImg = new Image();
-        testImg.onload = () => {
-            console.log("Jellyfin reached successfully.");
-        };
         testImg.onerror = () => {
-            // If browser fails, override the PHP guess immediately
             document.getElementById('status_gif').src = "./images/jellykill.gif";
-            const text = document.getElementById('status_text');
-            text.textContent = "jellykill";
-            text.style.color = "#dc2626";
+            const textEl = document.getElementById('status_text');
+            textEl.textContent = "jellykill";
+            textEl.style.color = "#dc2626";
         };
-        testImg.src = "<?php echo $imgUrl; ?>?rand=" + Date.now();
+        // Use your cache-busting trick
+        testImg.src = "<?php echo $asset_url; ?>?rand=" + Date.now();
     </script>
 </body>
 </html>
